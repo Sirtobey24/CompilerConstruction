@@ -84,11 +84,9 @@ public class Driver
             System.out.print("Please enter all final states on one line in format {1,2,....,n}");
             int endState = input.nextInt();
 
-
         } while (!input.nextLine().equals(""));
 
     }
-
 
     private static <T> Set<Set<T>> powerSet(Set<T> set)
     {
@@ -113,7 +111,6 @@ public class Driver
         }
         return powerSet;
 
-
     }
 
 //    private static <E> Set<E> union(Set<E> a, Set<E> b)
@@ -126,16 +123,56 @@ public class Driver
 
     private static void DFAcreation(int col, int row)
     {
-        //System.out.println("IN DFA creation");
-        //for (int k = 0; k <= row; k++)
-        //{
-            //System.out.println("IN DFA creation For loop 1");
-          //  for (int l = 0; l <= col; l++)
+        int myCol;
+        //char ch;
+
+        String holder = transitionFunctionGraph[col][row];
+        if (holder.length() == 1)
+        {
+            if (holder.charAt(0) == '0')
+            {
+                System.out.print(" = " + " empty");
+            }
+            else
+            {
+                myCol = (Integer.parseInt(holder));
+                System.out.print("myCol: " + myCol);
+                System.out.print(" = {" + holder + "," + transitionFunctionGraph[myCol - 1][numofsymbols] + "}");
+            }
+        }
+        else
+        {
+            System.out.print(" = {");
+            for (int y = 0; y < holder.length() - 1; y++)
+            {
+                if (holder.charAt(y) == ',')
+                {
+                    continue;
+                }
+                else
+                {
+                    //ch = holder.charAt(y);
+                    myCol = (Character.getNumericValue(holder.charAt(y)));
+                    // System.out.print("myCol else: " + myCol);
+                    System.out.print(holder + "," + transitionFunctionGraph[myCol][numofsymbols] + " ");
+
+                    //}
+                }
+                System.out.print("}");
+
+            }
+
+            //System.out.println("IN DFA creation");
+            //for (int k = 0; k <= row; k++)
             //{
-                System.out.print(" n= " + transitionFunctionGraph[col][row]);
+            //System.out.println("IN DFA creation For loop 1");
+            //  for (int l = 0; l <= col; l++)
+            //{
+            //          System.out.print(" n= " + transitionFunctionGraph[col][row]); WORKS
             //}
-            System.out.println();
-        //}
+            //      System.out.println(); WORKS
+            //}
+        }
     }
 
     private static void DFA()
@@ -149,8 +186,13 @@ public class Driver
         System.out.println("Transition function of DFA: \n");
 
         int row = 0, column = 0;
+
+        String rowCatcher;
+
         for (Set<Integer> state : powerSet(state_set))
         {
+            Object[] state_set_arr = powerSet(state_set).toArray();
+            // System.out.println(state_set_arr[row++]);
 
             for (int j = 0; j < numofsymbols; j++)
             {
@@ -159,33 +201,70 @@ public class Driver
 
                 if (state.isEmpty())
                 {
-                    System.out.println("= empty 0");
+                    System.out.println("= empty ");
                 }
                 else
                 {
+                    rowCatcher = state_set_arr[j].toString();
+                    if (rowCatcher.length() == 1)
+                    {
+                        column = Integer.parseInt(rowCatcher) - 1;
+
+                    }
+
+                /*    if (rowCatcher.length() > 1)
+                    {
+
+                        for (int y = 0; y < rowCatcher.length(); y++)
+                        {
+                            if (rowCatcher.charAt(y) == ',')
+                            {
+                                continue;
+                            }
+
+                            column =(Character.getNumericValue(rowCatcher.charAt(y)) -1) ;
+
+                            DFAcreation(column, row);
+
+                            row++;
+                            //column++;
+                            if (row == (numofsymbols))
+                            {
+                                row = 0;
+                                column++;
+                            }
+
+
+                        }
+                    }*/
+
 
                     DFAcreation(column, row);
+
                     row++;
                     //column++;
-                    if(row == (numofsymbols + 1))
+                    if (row == (numofsymbols))
                     {
-                        row =0;
+                        row = 0;
                         column++;
                     }
-                    if (column == numofstates)
-                    {
-                        column = 0;
-                        row =0;
-                    }
+//                    if (column == numofstates)
+//                    {
+//                        column = 0;
+//                        row = 0;
+//                    }
+
                 }
+
+
                 System.out.println("\n");
             }
         }
+
+
         //String[][] DFAGraphInfo = new String[state_set.size()][symbol_set.size()+1];//creation of graph for DFA
 
-
     }
-
 
 }
 
