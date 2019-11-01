@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Sean de Silva, Jonathan Smart, Alejandro Cruz
@@ -28,6 +25,7 @@ public class Driver
     {
         do
         {
+            System.out.println("0,2,3, 23, ,3, 0, 1,0,0  , 1start 1 final ");
             System.out.println("Please enter number of states: ");
             numofstates = input.nextInt();
             for (int i = 1; i <= numofstates; i++)
@@ -109,7 +107,9 @@ public class Driver
             powerSet.add(subset);
 
         }
+
         return powerSet;
+
 
     }
 
@@ -140,6 +140,16 @@ public class Driver
                 System.out.print(" = {" + holder + "," + transitionFunctionGraph[myCol - 1][numofsymbols] + "}");
             }
         }
+        else if (holder.length() == 3) //made tody
+        {
+            myCol = Integer.parseInt(String.valueOf(holder.charAt(0)));
+            //(Integer.parseInt(holder.charAt(0)));
+            System.out.print("myCol: " + myCol);
+            System.out.print(" = {" + holder + "," + transitionFunctionGraph[myCol - 1][numofsymbols] + ",");
+            myCol = Integer.parseInt(String.valueOf(holder.charAt(2)));
+            System.out.print(" :myCol: " + myCol);
+            System.out.print(" = {" + holder + "," + transitionFunctionGraph[myCol - 1][numofsymbols] + ",");
+        }
         else
         {
             System.out.print(" = {");
@@ -152,8 +162,9 @@ public class Driver
                 else
                 {
                     //ch = holder.charAt(y);
-                    myCol = (Character.getNumericValue(holder.charAt(y)));
+                    //myCol = (Character.getNumericValue(holder.charAt(y)));
                     // System.out.print("myCol else: " + myCol);
+                    myCol = Integer.parseInt(String.valueOf(holder.charAt(y)));
                     System.out.print(holder + "," + transitionFunctionGraph[myCol][numofsymbols] + " ");
 
                     //}
@@ -188,56 +199,38 @@ public class Driver
         int row = 0, column = 0;
 
         String rowCatcher;
+        ArrayList<Set<Integer>> state_set_arr = new ArrayList<>(powerSet(state_set));
+        int k = 0;
 
         for (Set<Integer> state : powerSet(state_set))
         {
-            Object[] state_set_arr = powerSet(state_set).toArray();
+            System.out.println("States " + state_set_arr.get(k));
+            //Object [] state_set_arr = powerSet(state_set).toArray();
             // System.out.println(state_set_arr[row++]);
 
             for (int j = 0; j < numofsymbols; j++)
             {
+
 
                 System.out.print("Delta'(" + state.toString().replace("[", "{").replace("]", "}") + "," + alphabet[j] + ")");
 
                 if (state.isEmpty())
                 {
                     System.out.println("= empty ");
+                    k++;
                 }
                 else
                 {
-                    rowCatcher = state_set_arr[j].toString();
+                    rowCatcher = state_set_arr.get(k).toString();
+                    //int sizeme = rowCatcher.length();
+                    //System.out.println("RowCatcher: " + rowCatcher + " its size: " + sizeme);
+
                     if (rowCatcher.length() == 1)
                     {
-                        column = Integer.parseInt(rowCatcher) - 1;
+                        column = Integer.parseInt(String.valueOf(rowCatcher.charAt(1))) - 1;
+                        //Integer.parseInt(rowCatcher) -1 ;
 
                     }
-
-                /*    if (rowCatcher.length() > 1)
-                    {
-
-                        for (int y = 0; y < rowCatcher.length(); y++)
-                        {
-                            if (rowCatcher.charAt(y) == ',')
-                            {
-                                continue;
-                            }
-
-                            column =(Character.getNumericValue(rowCatcher.charAt(y)) -1) ;
-
-                            DFAcreation(column, row);
-
-                            row++;
-                            //column++;
-                            if (row == (numofsymbols))
-                            {
-                                row = 0;
-                                column++;
-                            }
-
-
-                        }
-                    }*/
-
 
                     DFAcreation(column, row);
 
@@ -258,7 +251,9 @@ public class Driver
 
 
                 System.out.println("\n");
+                k++;
             }
+
         }
 
 
@@ -268,5 +263,5 @@ public class Driver
 
 }
 
-    
+
 
