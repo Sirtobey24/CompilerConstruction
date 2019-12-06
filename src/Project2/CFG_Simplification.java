@@ -1,6 +1,6 @@
 package Project2;
 
-import java.util.Scanner;
+        import java.util.Scanner;
 
 /**
  * @author Sean de Silva, Jonathan Smart
@@ -29,7 +29,8 @@ public class CFG_Simplification
 
     private static void USELESS()
     {
-        int mycount1 =0;
+        int mycount1=0;
+        posHolder = new int [5];
         System.out.println("Now using the useless rules we have: ");
 
         int word = Language[0].length();
@@ -43,20 +44,35 @@ public class CFG_Simplification
                 if (AlphabetHolder[j] == myLang.charAt(k))
                 {
                     System.out.println("|" + AlphabetHolder[j]);
-                    posHolder[mycount1++] = j;
+                    posHolder[mycount1] = j;
+                    mycount1++;
                     break;
                 }
 
             }
         }
 
-        System.out.println("num count: "+ (numcount+1) +" , "+ AlphabetHolder[numcount+1]);
-        Language[numcount+1] = " ";
+        int numCount =1;
+
+        for(int i =0; i< posHolder.length;i++) {
+            if(numCount == posHolder[i]) {
+                numCount++;
+                continue;
+            }
+            else {
+                deletme = AlphabetHolder[numCount];
+            }
+        }
+
+
+        System.out.println("num count: "+ deletme +" , "+ AlphabetHolder[numCount]);
+
+        Language[numCount] = " ";
 
         myLang = Language[1];
         for (int n = 0; n < Language[1].length(); n++)
         {
-            if (AlphabetHolder[numcount+1] == myLang.charAt(n))
+            if (AlphabetHolder[numCount] == myLang.charAt(n))
             {
                 System.out.println("Needs replacement :" + Language[1]);
             }
@@ -66,7 +82,7 @@ public class CFG_Simplification
         myLang = Language[2];
         for (int n = 0; n < Language[2].length(); n++)
         {
-            if (AlphabetHolder[numcount+1] == myLang.charAt(n))
+            if (AlphabetHolder[numCount] == myLang.charAt(n))
             {
                 String[] arrOfStr = Language[2].split("\\|",5);
                 System.out.println("in the if");
@@ -79,7 +95,7 @@ public class CFG_Simplification
 
                 for(int i =0; i< arrOfStr.length; i++) {
                     for(int j=0; j < arrOfStr[i].length(); j++) {
-                        if(AlphabetHolder[numcount+1] == arrOfStr[i].charAt(j)) {
+                        if(AlphabetHolder[numCount] == arrOfStr[i].charAt(j)) {
                             countholder = i;
                         }
                     }
@@ -101,7 +117,7 @@ public class CFG_Simplification
         PrintLanaguague();
         System.out.println("REmoved\n");
 
-        for (int k = 1; k < numcount+1; k++)
+        for (int k = 1; k < numCount+1; k++)
         {
             word = Language[k].length();
 
@@ -116,6 +132,8 @@ public class CFG_Simplification
                     else
                     {deletme = AlphabetHolder[k];
                         Language[k]= " ";
+
+                        System.out.print("NEeds deletion: "+ deletme);
                     }
                 }
             }
@@ -124,7 +142,7 @@ public class CFG_Simplification
 
         word = Language[0].length();
         myLang = Language[0];
-        for (int a = 1; a < numcount; a++) {
+        for (int a = 1; a < numCount; a++) {
             for (int b = 0; b < word; b++) {
                 if (AlphabetHolder[a] == myLang.charAt(b))
                 {
@@ -134,26 +152,32 @@ public class CFG_Simplification
                         break;
                     }
                     else {
-                        String[] arrOfStr = Language[0].split("\\|",5);
+                        String[] arrOfStr2 = Language[0].split("\\|",5);
+                        for (String a2 : arrOfStr2) {
+                            System.out.println(a2 + " | ");
+                        }
 
                         int countholder = -1;
-                        for(int i =0; i< arrOfStr.length; i++) {
+                        for(int i =0; i< arrOfStr2.length; i++) {
                             System.out.print("Balls deeper\n");
-                            for(int j=0; j < arrOfStr[i].length(); j++) {
-                                if(deletme == arrOfStr[i].charAt(j)) {
+
+                            for(int j=0; j < arrOfStr2[i].length(); j++) {
+                                if(deletme == arrOfStr2[i].charAt(j)) {
                                     countholder = i;
                                 }
                             }
                         }
 
-                        arrOfStr[countholder] = "";
-                        Language[0] = " ";
-                        for(int i =0; i< arrOfStr.length; i++) {
-                            System.out.println("** "+arrOfStr[i] + " **");
-                            Language[0]+= arrOfStr[i] + "|";
+                        if(countholder > 0) {
+                            arrOfStr2[countholder] = "";
+                            Language[0] = " ";
+                            for(int i =0; i< arrOfStr2.length; i++) {
+                                System.out.println("**** "+arrOfStr2[i] + " ****");
+                                Language[0]+= arrOfStr2[i] + "|";
 //                      	if(arrOfStr[i+1] != " ") {
 //                      		Language[0]+=  "|";
 //                      	}
+                            }
                         }
                     }
                 }
